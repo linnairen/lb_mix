@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script type="text/javascript">
+			!function(n){var e=n.document,t=e.documentElement,i=750,d=i/100,o="orientationchange"in n?"orientationchange":"resize",a=function(){var w=t.clientWidth||320;w>750&&(w=750);t.style.fontSize=w/d+"px"};e.addEventListener&&(n.addEventListener(o,a,!1),e.addEventListener("DOMContentLoaded",a,!1))}(window);
+		</script>
+		<!--<script src="https://injection/www/cordova.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="https://injection/www/plugins/cordova-plugin-token/Token.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="https://injection/www/plugins/cordova-plugin-utils/Utils.js" type="text/javascript" charset="UTF-8"></script>-->
+		<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/token.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/detail.css"/>
+	</head>
+	<body>
+		<div class="main" id="main" style="display: none;">
+			<div class="title">
+				<p><img src="img/b.png"/><span>{{ typeText[type - 1] }}</span><em>({{ weekDetail.beginTime }}至{{ weekDetail.endTime }})</em></p>
+				<p :class="dealClass(weekDetail.ifTaskSuccess,weekDetail.ifHavAward)">{{dealState(weekDetail.ifTaskSuccess)}}</p>
+			</div>
+			<ul class="list">
+				<li v-for="(item,key) in dayList" :key="key">
+					<p>{{ item.date }}</p>
+					<p>{{ dealText(item) }}</p>
+				</li>
+			</ul>
+			<div class="total" v-if="type == 2 || type == 3">合计：{{ type == 2 ? (total[0] + '单') : (total[1] + '人') }}</div>
+			<div class="toTask"><b @click="toTask"><img src="img/work.png"/><span>我的任务</span></b></div>
+		</div>
+		
+		<script type="text/javascript">
+			document.body.onload = function () {
+				document.getElementById('main').style.display = 'block'
+			}
+			
+			/**
+			 * 添加script
+			 */
+			function appendFun(){
+				if(navigator.userAgent.toLowerCase().indexOf('android') == -1){
+					return
+				}
+				var arr = [
+					'https://injection/www/cordova.js',
+					'https://injection/www/plugins/cordova-plugin-token/Token.js',
+					'https://injection/www/plugins/cordova-plugin-utils/Utils.js'
+				]
+				for(var i = 0; i < arr.length; i++){
+					var script = document.createElement('script')
+					script.src = arr[i]
+					script.charset = "UTF-8"
+					script.type = "text/javascript"
+					document.body.appendChild(script)
+				}
+			}
+			
+			/**
+			 * iOS 桥接函数
+			 * @param {Function} callback
+			 */
+			function setupWebViewJavascriptBridge(callback) {
+			    if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+			    if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+			    window.WVJBCallbacks = [callback];
+			    var WVJBIframe = document.createElement('iframe');
+			    WVJBIframe.style.display = 'none';
+			    WVJBIframe.src = 'https://__bridge_loaded__';
+			    document.documentElement.appendChild(WVJBIframe);
+			    setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+			}
+			
+			/**
+			 * 判断客户端类型，并获取token
+			 * @param {Function} fun
+			 */
+			function getTokenFun (fun) {
+				if(navigator.userAgent.toLowerCase().indexOf('iphone') != -1){
+					setupWebViewJavascriptBridge(function(bridge){
+				        bridge.callHandler('tl_callBackToken',function(res) {
+				        	if(res.token){
+				        		fun && fun(res.token)
+				        	}
+				        	if(res.mobile){
+				        		
+				        	}
+				        })
+					})
+				}
+				else if(navigator.userAgent.toLowerCase().indexOf('android') != -1){
+					setTimeout(function(){
+						park_utils_plugin.utils(null,null,"showLoadingDialog","loading")
+						if(get_token){
+							get_token.getToken(function(token){
+								fun && fun(token)
+							})
+						}
+						else{
+							alert('网络错误')
+						}
+					},100)
+				}
+			}
+			
+			var em = new Vue({
+				el: '#main',
+				data: {
+					typeText: ['时长任务','成单任务','推荐新人'],
+					weekDetail: {
+//						beginTime: '2018-04-02',
+//						endTime: '2018-04-08',
+//						ifTaskSuccess: 1,
+//						ifHavAward: 1,
+//						type: 2
+					},
+					dayList: [
+//						{
+//							totalOnlineTime: 1000,
+//							completeOder: 0,
+//							recommendUser: 0,
+//							type: 2,
+//							createTime: 1522829346
+//						}
+					],
+					type: 2,
+					total: [0,0]
+				},
+				mounted: function () {
+					appendFun()
+					var that = this,
+						weekNum = location.search.match(/[&\?]*weekNum=([^&]*)&?/) ? location.search.match(/[&\?]*weekNum=([^&]*)&?/)[1] : 0,
+						type = location.search.match(/[&\?]*type=([^&]*)&?/) ? location.search.match(/[&\?]*type=([^&]*)&?/)[1] : 0
+					this.type = type
+					document.querySelector('title').innerText = this.typeText[type - 1]
+					if(weekNum && type) {
+						setTimeout(function(){
+							getTokenFun(function(token){
+								that.getWeekDetail(token,weekNum,type)
+							})
+						},100)
+					}
+				},
+				methods: {
+					getWeekDetail: function (token,weekNum,type) {
+						var that = this
+						getWeekDetail(token,{
+							weekNum: weekNum,
+							type: type
+						},function(res){
+							if(res.code == 200){
+								that.weekDetail = res.rs.weekDetail
+								that.dayList = []
+								for(var i =0; i< res.rs.dayList.length; i ++){
+									that.dayList.push(res.rs.dayList[i])
+									that.total[0] += res.rs.dayList[i].completeOder
+									that.total[1] += res.rs.dayList[i].recommendUser
+								}
+//								alert(JSON.stringify(that.dayList))
+							}
+							else{
+								alert(res.msg)
+							}
+							park_utils_plugin && park_utils_plugin.utils(null,null,"dismissLoadingDialog","loading")
+						})
+						setTimeout(function(){
+							park_utils_plugin && park_utils_plugin.utils(null,null,"dismissLoadingDialog","loading")
+						},5000)
+					},
+					parseLocalDate: function (num) {
+						return ((new Date(num * 1000)).toLocaleDateString()).replace(/\//g,'-')
+					},
+					dealText: function (item) {
+						if(item.type == 1){
+							return  Math.floor(item.totalOnlineTime / 3600) + ':' + 
+									((Math.floor(item.totalOnlineTime % 3600 / 60) + '').length == 1 ? '0' : '') +
+									Math.floor(item.totalOnlineTime % 3600 / 60)
+						}
+						else if(item.type == 2){
+							return item.completeOder + '单'
+						}
+						else if(item.type == 3){
+							return item.recommendUser + '人'
+						}
+					},
+					dealClass: function (its,iha) {
+						if(iha == 1){
+							return 'c'
+						}
+						else{
+							if(its == 1){
+								return 'b'
+							}
+							else{
+								return 'a'
+							}
+						}
+					},
+					dealState: function (its) {
+						if(its == 1){
+							return '已达标'
+						}
+						else if(its == 2){
+							return '未完成'
+						}
+						else{
+							return '继续努力'
+						}
+					},
+					toTask: function () {
+						if(history.length == 2){
+							history.go(-1)
+						}
+						else if(history.length == 3){
+							history.go(-2)
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

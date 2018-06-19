@@ -1,0 +1,165 @@
+*{
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    letter-spacing: 0;
+    font-size: "PingFangSC-Regular","微软雅黑";
+}
+img{
+    border: none;
+}
+li{
+    list-style: none;
+}
+b{
+    font-weight: 500;
+}
+em{
+    font-style: normal;
+}
+body{
+    max-width: 7.5rem;
+    margin: 0 auto;
+    color: #444;
+    font-size: 0.24rem;
+    background: #f1f1f1;
+    padding-top: 0.2rem;
+    -webkit-user-select: none;
+}
+.main{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    .top{
+        display: flex;
+        padding: 0.5rem 0.5rem 0.36rem;
+        justify-content: space-between;
+        background: #fff;
+        margin-bottom: 0.2rem;
+        li{
+            text-align: center;
+        }
+        b{
+            color: #ff9938;
+            font-size: 0.4rem;
+        }
+        p{
+            margin-top: 0.16rem;
+            color: #666;
+            font-size: 0.3rem;
+        }
+    }
+    .bottom{
+        padding: 0 0.3rem;
+        background: #fff;
+        li{
+            height: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #efefef;
+        }
+        p{
+            width: 7em;
+            font-size: 0.3rem;
+            text-align: center;
+        }
+        span{
+            font-size: 0.28rem;
+            color: #444;
+        }
+        b{
+            font-size: 0.3rem;
+            font-weight: bold;
+        }
+        em{
+            font-size: 0.3rem;
+        }
+        .a{
+            b{
+                color: #F23939;
+            }
+        }
+        .b{
+            em{
+                color: #FF9938;
+            }
+        }
+        .c{
+            em{
+                color: #13DCB1;
+            }
+        }
+    }
+}
+.on{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1rem;
+    background: #fff;
+    -webkit-user-select: none;
+}
+.on span{
+    display: block;
+    height: 0.2rem;
+    width: 0.2rem;
+    border-radius: 100%;
+    background: #aaa;
+    margin-right: 0.2rem;
+}
+.on span:last-child{
+    margin-right: 0;
+}
+.on span:nth-child(1){
+    width: 0.2rem;
+    height: 0.2rem;
+    animation: ani1 1s linear infinite;
+}
+.on span:nth-child(2){
+    width: 0.2rem;
+    height: 0.2rem;
+    animation: ani2 1s linear infinite;
+}
+.on span:nth-child(3){
+    width: 0.2rem;
+    height: 0.2rem;
+    animation: ani1 1s linear infinite;
+}
+@keyframes ani1{
+    0% { transform: scale(0.5); }
+    25% { transform: scale(0.75); }
+    50% { transform: scale(1); }
+    75% { transform: scale(0.75); }
+    100% { transform: scale(0.5); }
+}
+@keyframes ani2{
+    0% { transform: scale(1); }
+    25% { transform: scale(0.75); }
+    50% { transform: scale(0.5); }
+    75% { transform: scale(0.75); }
+    100% { transform: scale(1); }
+}
+
+.toTask{
+    position: fixed;
+    bottom: 1.2rem;
+    right: 0.5rem;
+    z-index: 200;
+    b{
+        width: 1.2rem;
+        text-align: center;
+        font-size: 0.32rem;
+        text-decoration: none;
+        color: #5d657c;
+        img{
+            width: 1.2rem;
+            height: 1.2rem;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+    }
+}

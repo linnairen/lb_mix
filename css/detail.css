@@ -1,0 +1,113 @@
+* {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  letter-spacing: 0;
+  font-size: "PingFangSC-Regular", "微软雅黑";
+}
+img {
+  border: none;
+}
+li {
+  list-style: none;
+}
+b {
+  font-weight: 500;
+}
+em {
+  font-style: normal;
+}
+body {
+  max-width: 7.5rem;
+  margin: 0 auto;
+  color: #444;
+  font-size: 0.24rem;
+  background: #f1f1f1;
+  padding-top: 0.2rem;
+  -webkit-user-select: none;
+}
+.main {
+  background: #fff;
+}
+.main .title {
+  height: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.3rem;
+  border-bottom: 1px solid #efefef;
+}
+.main .title p {
+  display: flex;
+  align-items: center;
+}
+.main .title p:last-child {
+  font-size: 0.32rem;
+}
+.main .title img {
+  width: 0.08rem;
+  height: 0.32rem;
+  margin-right: 0.16rem;
+}
+.main .title span {
+  font-size: 0.32rem;
+  color: #444;
+  margin-right: 0.1rem;
+}
+.main .title em {
+  color: #888;
+  font-size: 0.28rem;
+}
+.main .title .a {
+  color: #F23939;
+}
+.main .title .b {
+  color: #FF9938;
+}
+.main .title .c {
+  color: #13DCB1;
+}
+.main .list {
+  padding: 0 0.3rem;
+}
+.main .list li {
+  display: flex;
+  justify-content: space-between;
+  height: 1rem;
+  color: #444;
+  font-size: 0.3rem;
+  align-items: center;
+  border-bottom: 1px solid #efefef;
+}
+.main .list li:last-child {
+  border: none;
+}
+.main .total {
+  text-align: center;
+  border-top: 1px solid #EFEFEF;
+  margin: 0 0.3rem;
+  font-size: 0.32rem;
+  color: #444;
+  font-weight: bold;
+  height: 1rem;
+  line-height: 1rem;
+}
+.toTask {
+  position: fixed;
+  bottom: 1.2rem;
+  right: 0.5rem;
+  z-index: 200;
+}
+.toTask b {
+  width: 1.2rem;
+  text-align: center;
+  font-size: 0.32rem;
+  text-decoration: none;
+  color: #5d657c;
+}
+.toTask b img {
+  width: 1.2rem;
+  height: 1.2rem;
+  display: block;
+  margin-bottom: 0.2rem;
+}

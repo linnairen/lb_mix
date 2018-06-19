@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>我的任务</title>
+		<script type="text/javascript">
+			!function(n){var e=n.document,t=e.documentElement,i=750,d=i/100,o="orientationchange"in n?"orientationchange":"resize",a=function(){var w=t.clientWidth||320;w>750&&(w=750);t.style.fontSize=w/d+"px"};e.addEventListener&&(n.addEventListener(o,a,!1),e.addEventListener("DOMContentLoaded",a,!1))}(window);
+		</script>
+		<!--<script src="https://injection/www/cordova.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="https://injection/www/plugins/cordova-plugin-token/Token.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="https://injection/www/plugins/cordova-plugin-utils/Utils.js" type="text/javascript" charset="UTF-8"></script>-->
+		<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/token.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/task.css"/>
+	</head>
+	<body>
+		<div class="main" id="main" style="display: none;">
+			<div class="main_top">
+				<img src="img/33.png" alt="萝卜停车" class="banner" />
+			</div>
+			<div class="main_list">
+				<div class="title">
+					<div class="l"><img src="img/b.png"/><b>累计奖励：</b><em>{{ totalAmount }}元</em></div>
+					<div class="r" @click="toList"><span>查看奖励记录</span><img src="img/m.png"/></div>
+				</div>
+				<div class="content">
+					<ul>
+						<li @click="toDetail(1)">
+							<img src="img/t.png" alt="" class="ic" />
+							<div class="detail">
+								<div class="t">
+									<div class="wn">时长任务</div>
+									<div class="on">
+										<p><b>本周达标：</b><em>{{onlineWeek}}天</em></p>
+										<p><b>今天在线：</b><em>{{onlineToday}}</em></p>
+									</div>
+								</div>
+								<p class="b">(每周五天，高峰时段在线超过8小时)</p>
+							</div>
+						</li>
+						<li @click="toDetail(2)">
+							<img src="img/rec.png" alt="" class="ic" />
+							<div class="detail">
+								<div class="t">
+									<div class="wn">成单任务</div>
+									<div class="on">
+										<p><b>本周：</b><em>{{orderNumWeek}}单</em></p>
+									</div>
+								</div>
+								<p class="b">(有效成单超过30单)</p>
+							</div>
+						</li>
+						<li @click="toDetail(3)">
+							<img src="img/out.png" alt="" class="ic" />
+							<div class="detail">
+								<div class="t">
+									<div class="wn">推新任务</div>
+									<div class="on">
+										<p><b>本周：</b><em>{{recommendNumWeek}}人</em></p>
+									</div>
+								</div>
+								<p class="b">(车主注册+成功下单超过10人)</p>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="rules">
+				<div class="rt">任务细则</div>
+				<ul>
+					<li>1、任务周期：周一到周日。</li>
+					<li>2、任务1：每天07:00-17:00期间，全天在线时长需超过8小时，每周超过五天。您将获得“天天在线奖”一份。</li>
+					<li>3、任务2：每周成单（有效）超过30、50、100，您将获得不同的“成单牛人奖”一份。</li>
+					<li>4、任务3：每周推荐新用户超过10、20、50，您将获得不同的“推新达人奖”一份。</li>
+					<li>5、以上任务长期有效，各类大奖按周发放。</li>
+				</ul>
+				<div class="text">各种大奖等您来拿哟！</div>
+			</div>
+		</div>
+		
+		
+		<script type="text/javascript">
+			document.body.onload = function () {
+				document.getElementById('main').style.display = 'block'
+			}
+			
+			/**
+			 * 添加script
+			 */
+			function appendFun(){
+				if(navigator.userAgent.toLowerCase().indexOf('android') == -1){
+					return
+				}
+				var arr = [
+					'https://injection/www/cordova.js',
+					'https://injection/www/plugins/cordova-plugin-token/Token.js',
+					'https://injection/www/plugins/cordova-plugin-utils/Utils.js'
+				]
+				for(var i = 0; i < arr.length; i++){
+					var script = document.createElement('script')
+					script.src = arr[i]
+					script.charset = "UTF-8"
+					script.type = "text/javascript"
+					document.body.appendChild(script)
+				}
+			}
+			
+			/**
+			 * iOS 桥接函数
+			 * @param {Function} callback
+			 */
+			function setupWebViewJavascriptBridge(callback) {
+			    if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+			    if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+			    window.WVJBCallbacks = [callback];
+			    var WVJBIframe = document.createElement('iframe');
+			    WVJBIframe.style.display = 'none';
+			    WVJBIframe.src = 'https://__bridge_loaded__';
+			    document.documentElement.appendChild(WVJBIframe);
+			    setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+			}
+			
+			/**
+			 * 判断客户端类型，并获取token
+			 * @param {Function} fun
+			 */
+			function getTokenFun (fun) {
+				if(navigator.userAgent.toLowerCase().indexOf('iphone') != -1){
+					setupWebViewJavascriptBridge(function(bridge){
+				        bridge.callHandler('tl_callBackToken',function(res) {
+				        	if(res.token){
+				        		fun && fun(res.token)
+				        	}
+				        	if(res.mobile){
+				        		
+				        	}
+				        })
+					})
+				}
+				else if(navigator.userAgent.toLowerCase().indexOf('android') != -1){
+					setTimeout(function(){
+						park_utils_plugin.utils(null,null,"showLoadingDialog","loading")
+						if(get_token){
+							get_token.getToken(function(token){
+								fun && fun(token)
+							})
+						}
+						else{
+							alert('网络错误')
+						}
+					},100)
+				}
+			}
+			
+			var em = new Vue({
+				el: '#main',
+				data: {
+					totalAmount: 0, //总奖励金额
+					onlineToday: '0:00', //今日在线时长
+					onlineWeek: 0, //达标天数
+					orderNumWeek: 0,//成单数
+					recommendNumWeek: 0, //推新数
+				},
+				mounted: function () {
+					var that = this
+					appendFun()
+					setTimeout(function () {
+						getTokenFun(function(token){
+							that.indexForB(token)
+						})
+					},100)
+				},
+				methods: {
+					indexForB: function (token) {
+						var that = this
+						indexForB(token,function(res){
+							if(res.code == 200){
+								that.totalAmount = res.rs.totalAmount
+								that.onlineToday = Math.floor(res.rs.onlineToday / 3600) + 
+									':' + ((Math.floor(res.rs.onlineToday % 3600 / 60) + '').length == 1 ? '0' : '') + 
+									Math.floor(res.rs.onlineToday % 3600 / 60)
+								that.onlineWeek = res.rs.onlineWeek
+								that.orderNumWeek = res.rs.orderNumWeek
+								that.recommendNumWeek = res.rs.recommendNumWeek
+							}
+							else{
+								alert(res.msg)
+							}
+							park_utils_plugin && park_utils_plugin.utils(null,null,"dismissLoadingDialog","loading")
+						})
+						setTimeout(function(){
+							park_utils_plugin && park_utils_plugin.utils(null,null,"dismissLoadingDialog","loading")
+						},5000)
+					},
+					toList: function () {
+						location.href = "list.html"+ '?_t=' + (new Date()).getTime()
+					},
+					toDetail: function (type) {
+						location.href = "detail.html?weekNum=0&type=" + type + '&_t=' + (new Date()).getTime()
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

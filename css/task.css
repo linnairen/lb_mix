@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  letter-spacing: 0;
+  font-size: "PingFangSC-Regular", "微软雅黑";
+}
+img {
+  border: none;
+}
+li {
+  list-style: none;
+}
+b {
+  font-weight: 500;
+}
+em {
+  font-style: normal;
+}
+body {
+  max-width: 7.5rem;
+  margin: 0 auto;
+  font-size: 0.24rem;
+  background: #f1f1f1;
+  -webkit-user-select: none;
+}
+.main {
+  width: 100%;
+}
+.banner {
+  width: 100%;
+  margin-bottom: 0.14rem;
+}
+.main_list {
+  background: #fff;
+  margin-bottom: 0.2rem;
+}
+.title {
+  height: 0.9rem;
+  line-height: 0.9rem;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 0 0.3rem;
+  border-bottom: 1px solid #efefef;
+}
+.l {
+  float: left;
+  line-height: 0.9rem;
+  font-size: 0.32rem;
+}
+.l img {
+  width: 0.08rem;
+  height: 0.32rem;
+  vertical-align: middle;
+  margin-right: 0.16rem;
+}
+.l b {
+  color: #444;
+  font-weight: 500;
+  vertical-align: middle;
+}
+.l em {
+  font-style: normal;
+  color: #ff9938;
+  vertical-align: middle;
+}
+.r {
+  float: right;
+  font-size: 0.28rem;
+  line-height: 0.9rem;
+  color: #888;
+}
+.r img {
+  width: 0.14rem;
+  height: 0.26rem;
+  vertical-align: middle;
+  margin-left: 0.1rem;
+}
+.content {
+  padding: 0 0.3rem;
+}
+.content li {
+  border-bottom: 1px solid #efefef;
+  height: 1.72rem;
+  display: flex;
+  align-items: center;
+}
+.content li .ic {
+  width: 1.06rem;
+  height: 1.06rem;
+  margin: 0 0.06rem;
+}
+.content li .detail {
+  margin-left: 0.46rem;
+}
+.content li .t {
+  display: flex;
+  align-items: center;
+  color: #666;
+  margin-bottom: 0.2rem;
+}
+.content li .wn {
+  font-size: 0.36rem;
+  margin-right: 0.4rem;
+  display: inline-block;
+  font-weight: bold;
+  font-family: "PingFangSC-Medium", "微软雅黑";
+}
+.content li .on {
+  font-size: 0.32rem;
+}
+.content li .on p {
+  margin-bottom: 0.14rem;
+}
+.content li .on p:last-child {
+  margin-bottom: 0;
+}
+.content li .on em {
+  color: #ff9938;
+}
+.content li .b {
+  color: #888;
+  font-size: 0.26rem;
+}
+.content li:last-child {
+  border: none;
+}
+.rules {
+  padding: 0.4rem;
+  background: #fff;
+}
+.rules .rt {
+  text-align: center;
+  color: #444;
+  font-size: 0.32rem;
+  margin-bottom: 0.39rem;
+  font-weight: bold;
+  font-family: "PingFangSC-Medium", "黑体";
+}
+.rules ul {
+  margin-bottom: 0.2rem;
+}
+.rules li {
+  line-height: 0.42rem;
+  color: #888;
+  font-size: 0.28rem;
+}
+.rules .text {
+  color: #ff9938;
+  text-align: center;
+  font-size: 0.34rem;
+  font-weight: bold;
+  font-family: "PingFangSC-Medium", "黑体";
+}
